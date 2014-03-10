@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+def options(opt):
+	pass
+
+def configure(conf):
+	conf.check_cxx(
+		msg="Checking for header boost/test/included/unit_test.hpp",
+		execute=True, define_ret=True,
+		fragment="""
+			#define BOOST_TEST_MAIN
+			#include <boost/test/included/unit_test.hpp>
+			BOOST_AUTO_TEST_SUITE(configure_suite)
+			BOOST_AUTO_TEST_CASE(configure_case) {
+				BOOST_REQUIRE(true);
+			}
+			BOOST_AUTO_TEST_SUITE_END()
+		""")
+
+def build(bld):
+	utest_src = ['unittest.cpp']
+	main_src = ['main.cpp'] + utest_src
+	src = bld.path.ant_glob('*.cpp', excl=main_src, dir=False)
+	bld.objects(source=src, target='src')
+	bld.program(features='test', source=utest_src,
+		target='unittest', use='src', install_path=False)

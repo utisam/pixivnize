@@ -1,0 +1,5 @@
+*.pyc
+gmon.out
+/build/
+/.lock-*
+/.waf-*

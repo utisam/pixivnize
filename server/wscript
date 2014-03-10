@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+import os
+
+APPNAME = 'sample'
+VERSION = '0.1.0'
+top = '.'
+out = 'build'
+
+subdirs = [d for d in os.listdir(top)\
+	if os.path.isdir(d) and not d.startswith('.') and d != 'build']
+
+def options(opt):
+	opt.load('compiler_cxx waf_unit_test')
+	opt.recurse(subdirs)
+
+def configure(conf):
+	conf.load('compiler_cxx waf_unit_test')
+	base_env = conf.get_env()
+	# common
+	conf.env.CXXFLAGS += ['-std=c++11']
+	conf.env.LINKFLAGS += ['-std=c++11']
+	conf.env.INCLUDES = conf.path.find_node('src').abspath()
+	if conf.check_cxx(lib='m', mandatory=False, define_ret=True):
+		conf.env.LIB += ['m']
+	# release
+	conf.setenv('release', env=base_env)
+	conf.env.CXXFLAGS += ['-O2']
+	conf.env.LINKFLAGS += ['-O2']
+	conf.env.DEFINES += ['NDEBUG']
+	# debug
+	conf.setenv('debug', env=base_env)
+	conf.env.CXXFLAGS += ['-g', '-pg']
+	conf.env.LINKFLAGS += ['-g', '-pg']
+	conf.env.DEFINES += ['_DEBUG']
+	
+	conf.recurse(subdirs)
+
+def build(bld):
+	if bld.cmd == 'clean':
+		gmon = bld.path.find_node('gmon.out')
+		if gmon:
+			gmon.delete()
+	bld.recurse(subdirs)
+	bld.program(source='src/main.cpp', target=APPNAME, use=subdirs)
+	from waflib.Tools import waf_unit_test
+	bld.add_post_fun(waf_unit_test.set_exit_code)
+	bld.add_post_fun(waf_unit_test.summary)
+
+from waflib.Build import BuildContext, CleanContext, InstallContext, UninstallContext
+for env in ['debug', 'release']:
+	for y in (BuildContext, CleanContext, InstallContext, UninstallContext):
+		y.variant = 'debug' # default variant
+		name = y.__name__.replace('Context','').lower()
+		class tmp(y):
+			cmd = name + '_' + env
+			variant = env
