@@ -29,6 +29,7 @@ PMA* buildPMA(const std::vector<std::string>& ptns) {
 		}
 		t->accept.push_back(i);
 	}
+	std::cout << "add accept" << std::endl;
 	// make failure link
 	std::queue<PMA*> que;
 	for (int c = 0; c < 255; ++c) {
@@ -40,6 +41,7 @@ PMA* buildPMA(const std::vector<std::string>& ptns) {
 			root->next[c] = root;
 		}
 	}
+	std::cout << "failure root" << std::endl;
 	while (!que.empty()) {
 		PMA* t = que.front();
 		que.pop();
@@ -52,6 +54,7 @@ PMA* buildPMA(const std::vector<std::string>& ptns) {
 			}
 		}
 	}
+	std::cout << "failure" << std::endl;
 	return root;
 }
 
