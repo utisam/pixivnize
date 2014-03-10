@@ -4,6 +4,7 @@
 #include <string>
 #include "pma.h"
 using namespace std;
+using namespace pma;
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[]) {
 		string tag = str.substr(0, pos);
 		ptns.push_back(tag);
 	}
-	PMA* pma = buildPMA(ptns);
+	PMA* pma = build(ptns);
 	string msg;
 	cin >> msg;
 	for (auto p : match(pma, msg, ptns)) {

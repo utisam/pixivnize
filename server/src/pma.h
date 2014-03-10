@@ -2,9 +2,9 @@
 #define _PMA_H
 #include <array>
 #include <string>
-#include <iostream>
-#include <queue>
 #include <vector>
+
+namespace pma {
 
 /**
  * Node of Pattan Matching Automata
@@ -35,10 +35,18 @@ public:
 	void add_pattern(const std::string& ptn, int idx) {
 		this->add_path(ptn)->add_accept(idx);
 	}
+	PMA* nullnext(int c) {
+		if (this->next[c]) return this;
+		return this->next[128]->nullnext(c);
+	}
 };
 
-PMA* buildPMA(const std::vector<std::string>& ptns);
+PMA* build(const std::vector<std::string>& ptns);
 
-std::vector<std::pair<int, int>> match(PMA* v, std::string t, const std::vector<std::string>& ptns);
+std::vector<std::pair<int, int>> match(
+	PMA* v, std::string t,
+	const std::vector<std::string>& ptns);
+
+}
 
 #endif
