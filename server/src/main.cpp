@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 	PMA* pma = build(ptns);
 	string msg;
 	cin >> msg;
-	for (auto p : match(pma, msg, ptns)) {
+	for (auto p : pma->match(msg, ptns)) {
 		string t = msg.substr(p.first, p.second);
 		cout << p.first << ':' << p.second << '\t' << t << endl;
 	}

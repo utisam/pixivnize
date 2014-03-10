@@ -39,13 +39,19 @@ public:
 		if (this->next[c]) return this;
 		return this->next[128]->nullnext(c);
 	}
+	/**
+	 * text内でPMAが受理する文字列を探す。
+	 * 結果は [(pos, length), ...] の形で得られる。
+	 */
+	std::vector<std::pair<int, int>> match(
+		const std::string& text,
+		const std::vector<std::string>& ptns);
 };
 
+/**
+ * 文字列パターンからPMAを生成する
+ */
 PMA* build(const std::vector<std::string>& ptns);
-
-std::vector<std::pair<int, int>> match(
-	PMA* v, std::string t,
-	const std::vector<std::string>& ptns);
 
 }
 
