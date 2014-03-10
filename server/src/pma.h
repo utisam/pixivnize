@@ -1,75 +1,44 @@
 #ifndef _PMA_H
 #define _PMA_H
 #include <array>
+#include <string>
+#include <iostream>
 #include <queue>
 #include <vector>
 
 /**
- * Pattan Matching Automata
+ * Node of Pattan Matching Automata
  */
 class PMA {
+private:
+	PMA* add_path(const std::string& ptn, size_t pos=0) {
+		if (pos == ptn.size()) return this;
+		int c = ptn[pos] + 128;
+		if (!this->next[c]) {
+			this->next[c] = new PMA;
+		}
+		return this->next[c]->add_path(ptn, pos + 1);
+	}
+	void add_accept(int idx) {
+		this->accept.push_back(idx);
+	}
 public:
 	std::array<PMA*, 0x100> next;
 	std::vector<int> accept;
 	PMA() {
 		next.fill(nullptr);
 	}
+	/**
+	 * 文字列を追加する。
+	 * これを行った後は失敗時の辺を追加する必要がある。
+	 */
+	void add_pattern(const std::string& ptn, int idx) {
+		this->add_path(ptn)->add_accept(idx);
+	}
 };
 
-PMA* buildPMA(const std::vector<std::string>& ptns) {
-	PMA* root = new PMA;
-	for (int i = 0; i < ptns.size(); ++i) {
-		PMA* t = root;
-		for (int c : ptns[i]) {
-			c += 128;
-			if (!t->next[c]) {
-				t->next[c] = new PMA;
-			}
-			t = t->next[c];
-		}
-		t->accept.push_back(i);
-	}
-	std::cout << "add accept" << std::endl;
-	// make failure link
-	std::queue<PMA*> que;
-	for (int c = 0; c < 255; ++c) {
-		if (c != 128 && root->next[c]) {
-			root->next[c]->next[128] = root;
-			que.push(root->next[c]);
-		}
-		else {
-			root->next[c] = root;
-		}
-	}
-	std::cout << "failure root" << std::endl;
-	while (!que.empty()) {
-		PMA* t = que.front();
-		que.pop();
-		for (int c = 0; c < 255; ++c) {
-			if (c != 128 && t->next[c]) {
-				que.push(t->next[c]);
-				PMA* r = t->next[128];
-				while (!r->next[c]) r = r->next[128];
-				t->next[c]->next[128] = r->next[c];
-			}
-		}
-	}
-	std::cout << "failure" << std::endl;
-	return root;
-}
+PMA* buildPMA(const std::vector<std::string>& ptns);
 
-std::vector<std::pair<int, int>> match(PMA* v, std::string t, const std::vector<std::string>& ptns) {
-	std::vector<std::pair<int, int>> result;
-	for (int i = 0; i < t.size(); ++i) {
-		int c = t[i] + 128;
-		while (!v->next[c]) v = v->next[128];
-		v = v->next[c];
-		for (int ac : v->accept) {
-			const std::string& m = ptns[ac];
-			result.push_back(std::make_pair(i - m.size() + 1, m.size()));
-		}
-	}
-	return result;
-}
+std::vector<std::pair<int, int>> match(PMA* v, std::string t, const std::vector<std::string>& ptns);
 
 #endif
