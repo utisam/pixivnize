@@ -3,6 +3,7 @@
 #include <array>
 #include <string>
 #include <vector>
+#include "matchresult.h"
 
 namespace pma {
 
@@ -43,7 +44,7 @@ public:
 	 * text内でPMAが受理する文字列を探す。
 	 * 結果は [(pos, length), ...] の形で得られる。
 	 */
-	std::vector<std::pair<int, int>> match(const std::string& text);
+	std::vector<MatchResult> match(const std::string& text);
 };
 
 /**

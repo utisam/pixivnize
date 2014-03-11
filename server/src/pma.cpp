@@ -38,8 +38,8 @@ PMA* build(const vector<string>& ptns) {
 	return root;
 }
 
-vector<pair<int, int>> PMA::match(const string& text) {
-	vector<pair<int, int>> result;
+vector<MatchResult> PMA::match(const string& text) {
+	vector<MatchResult> result;
 	PMA* v = this;
 	for (int i = 0; i < text.size(); ++i) {
 		int c = text[i] + 128;

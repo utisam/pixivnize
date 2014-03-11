@@ -23,8 +23,8 @@ int main(int argc, char* argv[]) {
 	string msg;
 	cin >> msg;
 	for (auto p : pma->match(msg)) {
-		string t = msg.substr(p.first, p.second);
-		cout << p.first << ':' << p.second << '\t' << t << endl;
+		string t = msg.substr(p.pos, p.length);
+		cout << p.pos << ':' << p.length << '\t' << t << endl;
 	}
 	return 0;
 }
