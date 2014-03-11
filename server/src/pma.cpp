@@ -4,13 +4,13 @@ using namespace std;
 
 namespace pma {
 
-PMA* build(const vector<string>& ptns) {
-	PMA* root = new PMA;
+node* build(const vector<string>& ptns) {
+	node* root = new node;
 	for (int i = 0; i < ptns.size(); ++i) {
 		root->add_pattern(ptns[i]);
 	}
 	// make failure link
-	queue<PMA*> que;
+	queue<node*> que;
 	for (int c = 0; c < 255; ++c) {
 		if (c != 128 && root->next[c]) {
 			root->next[c]->next[128] = root;
@@ -21,12 +21,12 @@ PMA* build(const vector<string>& ptns) {
 		}
 	}
 	while (!que.empty()) {
-		PMA* t = que.front();
+		node* t = que.front();
 		que.pop();
 		for (int c = 0; c < 255; ++c) {
 			if (c != 128 && t->next[c]) {
 				que.push(t->next[c]);
-				PMA* r = t->next[128]->nullnext(c);
+				node* r = t->next[128]->nullnext(c);
 				t->next[c]->next[128] = r->next[c];
 			}
 		}
@@ -34,9 +34,9 @@ PMA* build(const vector<string>& ptns) {
 	return root;
 }
 
-vector<MatchResult> PMA::match(const string& text) {
-	vector<MatchResult> result;
-	PMA* v = this;
+vector<match_result> node::match(const string& text) {
+	vector<match_result> result;
+	node* v = this;
 	for (int i = 0; i < text.size(); ++i) {
 		int c = text[i] + 128;
 		v = v->nullnext(c)->next[c];

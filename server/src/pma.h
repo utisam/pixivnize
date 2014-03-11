@@ -1,22 +1,22 @@
-#ifndef _PMA_H
-#define _PMA_H
+#ifndef _node_H
+#define _node_H
 #include <array>
 #include <string>
 #include <vector>
-#include "matchresult.h"
+#include "match_result.h"
 
 namespace pma {
 
 /**
  * Node of Pattan Matching Automata
  */
-class PMA {
+class node {
 private:
-	PMA* add_path(const std::string& ptn, size_t pos=0) {
+	node* add_path(const std::string& ptn, size_t pos=0) {
 		if (pos == ptn.size()) return this;
 		int c = ptn[pos] + 128;
 		if (!this->next[c]) {
-			this->next[c] = new PMA;
+			this->next[c] = new node;
 		}
 		return this->next[c]->add_path(ptn, pos + 1);
 	}
@@ -24,9 +24,9 @@ private:
 		this->accept.push_back(length);
 	}
 public:
-	std::array<PMA*, 0x100> next;
+	std::array<node*, 0x100> next;
 	std::vector<int> accept;
-	PMA() {
+	node() {
 		next.fill(nullptr);
 	}
 	/**
@@ -36,21 +36,21 @@ public:
 	void add_pattern(const std::string& ptn) {
 		this->add_path(ptn)->add_accept(ptn.size());
 	}
-	PMA* nullnext(int c) {
+	node* nullnext(int c) {
 		if (this->next[c]) return this;
 		return this->next[128]->nullnext(c);
 	}
 	/**
-	 * text内でPMAが受理する文字列を探す。
+	 * text内でnodeが受理する文字列を探す。
 	 * 結果は [(pos, length), ...] の形で得られる。
 	 */
-	std::vector<MatchResult> match(const std::string& text);
+	std::vector<match_result> match(const std::string& text);
 };
 
 /**
- * 文字列パターンからPMAを生成する
+ * 文字列パターンからnodeを生成する
  */
-PMA* build(const std::vector<std::string>& ptns);
+node* build(const std::vector<std::string>& ptns);
 
 }
 

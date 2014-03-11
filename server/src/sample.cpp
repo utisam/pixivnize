@@ -19,15 +19,14 @@ int main(int argc, char* argv[]) {
 		string tag = str.substr(0, pos);
 		ptns.push_back(tag);
 	}
-	PMA* pma = build(ptns);
+	node* node = build(ptns);
 	cout << "complete!" << endl;
 
 	string msg;
 	while (cout << "message: ", cin >> msg) {
-		for (auto m : pma->match(msg)) {
+		for (auto m : node->match(msg)) {
 			cout << m << '\t' << m.matchstr(msg) << endl;
 		}
 	}
 	return 0;
 }
-
