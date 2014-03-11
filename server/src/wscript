@@ -17,6 +17,10 @@ def configure(conf):
 			}
 			BOOST_AUTO_TEST_SUITE_END()
 		""")
+	conf.env["LINKFLAGS"] += ["-pthread"]
+	conf.check_cxx(env=conf.env, msg="Checking for -pthread option")
+	if conf.check_cxx(lib='boost_system'):
+		conf.env.LIB += ['boost_system']
 
 def build(bld):
 	utest_src = ['unittest.cpp']
