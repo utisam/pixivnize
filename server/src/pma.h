@@ -19,8 +19,8 @@ private:
 		}
 		return this->next[c]->add_path(ptn, pos + 1);
 	}
-	void add_accept(int idx) {
-		this->accept.push_back(idx);
+	void add_accept(int length) {
+		this->accept.push_back(length);
 	}
 public:
 	std::array<PMA*, 0x100> next;
@@ -32,8 +32,8 @@ public:
 	 * 文字列を追加する。
 	 * これを行った後は失敗時の辺を追加する必要がある。
 	 */
-	void add_pattern(const std::string& ptn, int idx) {
-		this->add_path(ptn)->add_accept(idx);
+	void add_pattern(const std::string& ptn) {
+		this->add_path(ptn)->add_accept(ptn.size());
 	}
 	PMA* nullnext(int c) {
 		if (this->next[c]) return this;
@@ -43,9 +43,7 @@ public:
 	 * text内でPMAが受理する文字列を探す。
 	 * 結果は [(pos, length), ...] の形で得られる。
 	 */
-	std::vector<std::pair<int, int>> match(
-		const std::string& text,
-		const std::vector<std::string>& ptns);
+	std::vector<std::pair<int, int>> match(const std::string& text);
 };
 
 /**

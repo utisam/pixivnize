@@ -8,7 +8,7 @@ namespace pma {
 PMA* build(const vector<string>& ptns) {
 	PMA* root = new PMA;
 	for (int i = 0; i < ptns.size(); ++i) {
-		root->add_pattern(ptns[i], i);
+		root->add_pattern(ptns[i]);
 	}
 	cout << "add accept" << endl;
 	// make failure link
@@ -38,16 +38,14 @@ PMA* build(const vector<string>& ptns) {
 	return root;
 }
 
-vector<pair<int, int>> PMA::match(
-		const string& text, const vector<string>& ptns) {
+vector<pair<int, int>> PMA::match(const string& text) {
 	vector<pair<int, int>> result;
 	PMA* v = this;
 	for (int i = 0; i < text.size(); ++i) {
 		int c = text[i] + 128;
 		v = v->nullnext(c)->next[c];
-		for (int ac : v->accept) {
-			size_t len = ptns[ac].size();
-			result.emplace_back(i - len + 1, len);
+		for (int length : v->accept) {
+			result.emplace_back(i - length + 1, length);
 		}
 	}
 	return result;
