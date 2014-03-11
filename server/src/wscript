@@ -19,8 +19,9 @@ def configure(conf):
 		""")
 	conf.env["LINKFLAGS"] += ["-pthread"]
 	conf.check_cxx(env=conf.env, msg="Checking for -pthread option")
-	if conf.check_cxx(lib='boost_system'):
-		conf.env.LIB += ['boost_system']
+	for l in ('boost_system', 'boost_thread-mt', 'cppnetlib-server-parsers'):
+		if conf.check_cxx(lib=l):
+			conf.env.LIB += [l]
 
 def build(bld):
 	utest_src = ['unittest.cpp']

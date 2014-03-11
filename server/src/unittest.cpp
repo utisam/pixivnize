@@ -41,7 +41,6 @@ BOOST_AUTO_TEST_CASE(overlap) {
 		match_result(6, 2),
 	};
 	overlap_filter(results);
-	for (auto& r : results) cerr << r << endl;
 	BOOST_REQUIRE_EQUAL(results.size(), 3);
 	BOOST_REQUIRE_EQUAL(results[0], match_result(0, 1));
 	BOOST_REQUIRE_EQUAL(results[1], match_result(1, 5));
