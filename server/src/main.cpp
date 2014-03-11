@@ -20,11 +20,13 @@ int main(int argc, char* argv[]) {
 		ptns.push_back(tag);
 	}
 	PMA* pma = build(ptns);
+	cout << "complete!" << endl;
+
 	string msg;
-	cin >> msg;
-	for (auto p : pma->match(msg)) {
-		string t = msg.substr(p.pos, p.length);
-		cout << p.pos << ':' << p.length << '\t' << t << endl;
+	while (cout << "message: ", cin >> msg) {
+		for (auto m : pma->match(msg)) {
+			cout << m << '\t' << m.matchstr(msg) << endl;
+		}
 	}
 	return 0;
 }

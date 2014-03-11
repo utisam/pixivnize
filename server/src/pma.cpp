@@ -1,4 +1,3 @@
-#include <iostream>
 #include <queue>
 #include "pma.h"
 using namespace std;
@@ -10,7 +9,6 @@ PMA* build(const vector<string>& ptns) {
 	for (int i = 0; i < ptns.size(); ++i) {
 		root->add_pattern(ptns[i]);
 	}
-	cout << "add accept" << endl;
 	// make failure link
 	queue<PMA*> que;
 	for (int c = 0; c < 255; ++c) {
@@ -22,7 +20,6 @@ PMA* build(const vector<string>& ptns) {
 			root->next[c] = root;
 		}
 	}
-	cout << "failure from root" << endl;
 	while (!que.empty()) {
 		PMA* t = que.front();
 		que.pop();
@@ -34,7 +31,6 @@ PMA* build(const vector<string>& ptns) {
 			}
 		}
 	}
-	cout << "failure" << endl;
 	return root;
 }
 
