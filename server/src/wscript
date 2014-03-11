@@ -20,7 +20,7 @@ def configure(conf):
 
 def build(bld):
 	utest_src = ['unittest.cpp']
-	main_src = ['main.cpp'] + utest_src
+	main_src = ['main.cpp', 'sample.cpp'] + utest_src
 	src = bld.path.ant_glob('*.cpp', excl=main_src, dir=False)
 	bld.objects(source=src, target='src')
 	bld.program(features='test', source=utest_src,

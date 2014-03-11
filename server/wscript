@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 import os
 
-APPNAME = 'sample'
+APPNAME = 'server'
 VERSION = '0.1.0'
 top = '.'
 out = 'build'
@@ -43,6 +43,7 @@ def build(bld):
 			gmon.delete()
 	bld.recurse(subdirs)
 	bld.program(source='src/main.cpp', target=APPNAME, use=subdirs)
+	bld.program(source='src/sample.cpp', target='sample', use=subdirs)
 	from waflib.Tools import waf_unit_test
 	bld.add_post_fun(waf_unit_test.set_exit_code)
 	bld.add_post_fun(waf_unit_test.summary)
