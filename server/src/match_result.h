@@ -7,7 +7,7 @@ namespace pma {
 
 class match_result {
 public:
-	const int pos, length;
+	int pos, length;
 	match_result() : pos(0), length(0) {}
 	match_result(int p, int l) : pos(p), length(l) {}
 	bool operator==(const match_result& o) const {
@@ -18,6 +18,9 @@ public:
 	 */
 	std::string matchstr(const std::string& str) const {
 		return str.substr(pos, length);
+	}
+	int end() const {
+		return pos + length;
 	}
 };
 inline std::ostream& operator<<(std::ostream& ost, const match_result& o) {

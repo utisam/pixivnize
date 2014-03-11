@@ -60,6 +60,8 @@ public:
  */
 node* build(const std::vector<std::string>& ptns);
 
+std::vector<match_result>& overlap_filter(std::vector<match_result>& results);
+
 }
 
 #endif

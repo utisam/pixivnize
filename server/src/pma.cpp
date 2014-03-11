@@ -1,4 +1,5 @@
 #include <queue>
+#include <iostream>
 #include "pma.h"
 using namespace std;
 
@@ -45,6 +46,26 @@ vector<match_result> node::match(const string& text) {
 		}
 	}
 	return result;
+}
+
+/**
+ * matchの結果から重複を削除する。
+ * 
+ * 先に見つかった方を優先する。
+ * 同じ場所から開始している場合は最長のもののみを残す。
+ */
+std::vector<match_result>& overlap_filter(std::vector<match_result>& results) {
+	int insert = 0;
+	for (int i = 0; i < results.size(); ++i) {
+		if (insert > 0 && results[i].pos < results[insert - 1].end())
+			continue;
+		if (i == results.size() - 1 || results[i].pos != results[i + 1].pos) {
+			results[insert] = results[i];
+			++insert;
+		}
+	}
+	results.resize(insert);
+	return results;
 }
 
 }
