@@ -13,6 +13,9 @@ public:
 	bool operator==(const match_result& o) const {
 		return o.pos == pos && o.length == length;
 	}
+	/**
+	 * str の内、この結果が表す部分文字列を返す
+	 */
 	std::string matchstr(const std::string& str) const {
 		return str.substr(pos, length);
 	}

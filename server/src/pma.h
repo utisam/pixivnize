@@ -8,7 +8,13 @@
 namespace pma {
 
 /**
- * Node of Pattan Matching Automata
+ * パターンマッチングオートマトンのノード。
+ * 
+ * build関数を用いて生成して下さい。
+ * 
+ * グラフ内に閉路がある。
+ * そのため子をデストラクタで単純にdeleteすると二重に開放して死ぬ。
+ * メモリリークが問題になる場合には外部からdeleteするアルゴリズムが必要。
  */
 class node {
 private:
@@ -48,7 +54,9 @@ public:
 };
 
 /**
- * 文字列パターンからnodeを生成する
+ * 文字列パターンからパターンマッチングオートマトンを生成する。
+ *
+ * 戻り値はヒープ上のルートノード。
  */
 node* build(const std::vector<std::string>& ptns);
 
