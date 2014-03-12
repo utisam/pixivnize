@@ -14,9 +14,7 @@ BOOST_AUTO_TEST_CASE(node_ascii) {
 	string text = "xbabcdex";
 	auto result = node->match(text);
 	BOOST_REQUIRE_EQUAL(result[0], match_result(1, 3));
-	BOOST_REQUIRE_EQUAL(result[0].matchstr(text), "bab");
 	BOOST_REQUIRE_EQUAL(result[1], match_result(2, 5));
-	BOOST_REQUIRE_EQUAL(result[1].matchstr(text), "abcde");
 }
 
 BOOST_AUTO_TEST_CASE(node_wb) {
@@ -26,9 +24,9 @@ BOOST_AUTO_TEST_CASE(node_wb) {
 	node* node = build(ptns);
 	string text = "あいうえおかきくけこ";
 	auto result = node->match(text);
-	BOOST_REQUIRE_EQUAL(result[0].matchstr(text), "あい");
-	BOOST_REQUIRE_EQUAL(result[1].matchstr(text), "あいうえ");
-	BOOST_REQUIRE_EQUAL(result[2].matchstr(text), "かきくけこ");
+	BOOST_REQUIRE_EQUAL(result[0], match_result(0, 2));
+	BOOST_REQUIRE_EQUAL(result[1], match_result(0, 4));
+	BOOST_REQUIRE_EQUAL(result[2], match_result(5, 5));
 }
 
 BOOST_AUTO_TEST_CASE(overlap) {

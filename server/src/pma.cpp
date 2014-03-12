@@ -38,11 +38,17 @@ node* build(const vector<string>& ptns) {
 vector<match_result> node::match(const string& text) {
 	vector<match_result> result;
 	node* v = this;
+	int next = 0;
+	int wblen = 0;
 	for (int i = 0; i < text.size(); ++i) {
+		if (i == next) {
+			wblen++;
+			next += headbyte_utf8(text[i]);
+		}
 		int c = text[i] + 128;
 		v = v->nullnext(c)->next[c];
 		for (int length : v->accept) {
-			result.emplace_back(i - length + 1, length);
+			result.emplace_back(wblen - length, length);
 		}
 	}
 	return result;
