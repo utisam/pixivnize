@@ -16,9 +16,12 @@ class handler_type {
 public:
 	void operator()(http_server::request const &request,
 					http_server::response &response) {
-		string ip = source(request);
-		string dest = static_cast<string>(http::destination(request));
-		cout << "[" << ip << "]: " << dest << endl;
+		const string& src = request.source;
+		const string& dest = request.destination;
+		const string& method = request.method;
+		unsigned int majour = request.http_version_major;
+		unsigned int minor = request.http_version_minor;
+		cout << src << " -- " << method << ' ' << dest << " HTTP" << majour << '.' << minor << endl;
 
 		string result;
 		auto results = pma_root->match(request.body);
