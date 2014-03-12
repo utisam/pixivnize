@@ -1,5 +1,5 @@
-#ifndef _node_H
-#define _node_H
+#ifndef _PMA_H
+#define _PMA_H
 #include <array>
 #include <string>
 #include <vector>
