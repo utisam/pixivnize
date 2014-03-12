@@ -18,17 +18,35 @@ var expr = document.createExpression(XPATH, NSResolver);
     range.selectNodeContents(document.body);
     var i = 0, tn, len;
     console.log('pixivnize');
+    
     while (tn = textNodes.snapshotItem(i++)) {
-        console.log(tn.nodeValue);
         if (tn.nodeValue.length <= 1) continue;
         GM_xmlhttpRequest({
-            method: "POST",
-            url: "http://localhost:8000/",
-            data: tn.nodeValue,
-            headers: {"Content-Type": "text/plain"},
-            onload: function(response) {
-                console.log(response.responseText);
-            }
+          method: "POST",
+          url: "http://localhost:8000/",
+          data: tn.nodeValue,
+          headers: {
+            "Content-Type": "text"
+          },
+          onload: function(resp) {
+                console.log(this.data);
+                var results = resp.responseText.split('\n');
+                var html = "";
+                var cur = 0;
+                for (var i = 0; i < results.length; ++i) {
+                    var item = results[i].split(',');
+                    if (item.length === 1) continue;
+                    var pos = parseInt(item[0]);
+                    var len = parseInt(item[1]);
+                    html += this.data.substring(cur, pos);
+                    html += '<a href="#">' + this.data.substr(pos, len) + '</a>';
+                    cur = pos + len;
+                }
+                html += this.data.substr(cur);
+                console.log(html);
+                // var df = range.createContextualFragment(html);
+                // tn.parentNode.replaceChild(df, tn);
+          }
         });
     }
-})();
+}) ();
