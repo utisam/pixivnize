@@ -17,18 +17,18 @@ var expr = document.createExpression(XPATH, NSResolver);
     var range = document.createRange();
     range.selectNodeContents(document.body);
     var i = 0, tn, len;
-    console.log('pixivnize');
     
     while (tn = textNodes.snapshotItem(i++)) {
         if (tn.nodeValue.length <= 1) continue;
         GM_xmlhttpRequest({
-          method: "POST",
-          url: "http://localhost:8000/",
-          data: tn.nodeValue,
-          headers: {
+            method: "POST",
+            url: "http://localhost:8000/",
+            data: tn.nodeValue,
+            textNode: tn,
+            headers: {
             "Content-Type": "text"
-          },
-          onload: function(resp) {
+            },
+            onload: function(resp) {
                 console.log(this.data);
                 var results = resp.responseText.split('\n');
                 var html = "";
@@ -39,14 +39,16 @@ var expr = document.createExpression(XPATH, NSResolver);
                     var pos = parseInt(item[0]);
                     var len = parseInt(item[1]);
                     html += this.data.substring(cur, pos);
-                    html += '<a href="#">' + this.data.substr(pos, len) + '</a>';
+                    var label = this.data.substr(pos, len);
+                    var uri = 'http://www.pixiv.net/search.php?s_mode=s_tag_full&word=' + encodeURIComponent(label);
+                    html += '<a href="' + uri + '" style="text-decoration:none;">' + label + '</a>'; //color:inherit;する？
                     cur = pos + len;
                 }
                 html += this.data.substr(cur);
                 console.log(html);
-                // var df = range.createContextualFragment(html);
-                // tn.parentNode.replaceChild(df, tn);
-          }
+                var df = range.createContextualFragment(html);
+                this.textNode.parentNode.replaceChild(df, this.textNode);
+            }
         });
     }
 }) ();

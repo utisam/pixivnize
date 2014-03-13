@@ -44,8 +44,8 @@ void init_pma_root(const string filename) {
 	vector<string> ptns;
 	string line;
 	while (getline(tags, line)) {
-		string tag = line.substr(0, line.find('\t'));
-		ptns.push_back(tag);
+		// string tag = line.substr(0, line.find('\t'));
+		ptns.push_back(line);
 	}
 	pma_root = build(ptns);
 }
