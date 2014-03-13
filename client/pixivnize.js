@@ -65,10 +65,10 @@ var expr = document.createExpression(XPATH, NSResolver);
                     var m;
                     if (m = /<img src="(http:\/\/[^"]+)" alt="" class="_thumbnail/.exec(xhr.responseText)) {
                         // console.log(m[1]);
-                        document.body.insertAdjacentHTML('beforeend', '<div id="pixivnize-image-container" style="position:fixed;left:10px;bottom:24px;max-width:200px;"><img src="' + m[1] + '" alt=""></div>');
+                        document.body.insertAdjacentHTML('beforeend', '<div id="pixivnize-image-container" style="position:fixed;right:10px;bottom:24px;max-width:200px;"><img src="' + m[1] + '" alt=""></div>');
                     }
                 }
-            })
+            });
         }
     }, true);
 }) ();
