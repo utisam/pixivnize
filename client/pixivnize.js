@@ -28,7 +28,7 @@ var expr = document.createExpression(XPATH, NSResolver);
             textNode: tn,
             headers: {"Content-Type": "text"},
             onload: function(resp) {
-                console.log(this.data);
+                // console.log(this.data);
                 var results = resp.responseText.split('\n');
                 var html = "";
                 var cur = 0;
@@ -41,14 +41,34 @@ var expr = document.createExpression(XPATH, NSResolver);
                     html += this.data.substring(cur, pos);
                     var label = this.data.substr(pos, len);
                     var uri = 'http://www.pixiv.net/search.php?s_mode=s_tag_full&order=popular_d&manga=0&word=' + encodeURIComponent(label);
-                    html += '<a href="' + uri + '" style="text-decoration:none;" target="_blank">' + label + '</a>'; //color:inherit;する？
+                    html += '<a href="' + uri + '" style="text-decoration:none;" target="_blank" class="pixivnize">' + label + '</a>'; //color:inherit;する？
                     cur = pos + len;
                 }
                 html += this.data.substr(cur);
-                console.log(html);
+                // console.log(html);
                 var df = range.createContextualFragment(html);
                 this.textNode.parentNode.replaceChild(df, this.textNode);
             }
         });
     }
+
+    document.addEventListener('mouseover', function(ev) {
+        if (/pixivnize/.test(ev.target.className)) {
+            GM_xmlhttpRequest({
+                method: "GET",
+                url: ev.target.href,
+                onload: function(xhr) {
+                    var elem = document.querySelector('#pixivnize-image-container');
+                    if (elem) {
+                        document.body.removeChild(elem);
+                    }
+                    var m;
+                    if (m = /<img src="(http:\/\/[^"]+)" alt="" class="_thumbnail/.exec(xhr.responseText)) {
+                        // console.log(m[1]);
+                        document.body.insertAdjacentHTML('beforeend', '<div id="pixivnize-image-container" style="position:fixed;left:10px;bottom:24px;max-width:200px;"><img src="' + m[1] + '" alt=""></div>');
+                    }
+                }
+            })
+        }
+    }, true);
 }) ();
