@@ -2,12 +2,13 @@
 // @name        pixivnize
 // @namespace   pxv
 // @include     *
+// @exclude     http://www.pixiv.net/search.php?*
 // @version     1
 // @grant       GM_xmlhttpRequest
 // ==/UserScript==
 
 
-var XPATH = '/html/body/descendant::text()[string-length(normalize-space(self::text())) > 0 and not(ancestor::a or ancestor::iframe or ancestor::textarea or ancestor::script or ancestor::style or ancestor::x:a or ancestor::x:iframe or ancestor::x:textarea or ancestor::x:script or ancestor::x:style)]';
+var XPATH = '/html/body/descendant::text()[string-length(normalize-space(self::text())) > 0 and not(ancestor::a or ancestor::button or ancestor::iframe or ancestor::textarea or ancestor::script or ancestor::style or ancestor::x:a or ancestor::x:button or ancestor::x:iframe or ancestor::x:textarea or ancestor::x:script or ancestor::x:style)]';
 var NSResolver = function () {
     return 'http://www.w3.org/1999/xhtml'
 };
@@ -25,9 +26,7 @@ var expr = document.createExpression(XPATH, NSResolver);
             url: "http://localhost:8000/",
             data: tn.nodeValue,
             textNode: tn,
-            headers: {
-            "Content-Type": "text"
-            },
+            headers: {"Content-Type": "text"},
             onload: function(resp) {
                 console.log(this.data);
                 var results = resp.responseText.split('\n');
@@ -38,10 +37,11 @@ var expr = document.createExpression(XPATH, NSResolver);
                     if (item.length === 1) continue;
                     var pos = parseInt(item[0]);
                     var len = parseInt(item[1]);
+                    if (len === 1) continue;
                     html += this.data.substring(cur, pos);
                     var label = this.data.substr(pos, len);
-                    var uri = 'http://www.pixiv.net/search.php?s_mode=s_tag_full&word=' + encodeURIComponent(label);
-                    html += '<a href="' + uri + '" style="text-decoration:none;">' + label + '</a>'; //color:inherit;する？
+                    var uri = 'http://www.pixiv.net/search.php?s_mode=s_tag_full&order=popular_d&manga=0&word=' + encodeURIComponent(label);
+                    html += '<a href="' + uri + '" style="text-decoration:none;" target="_blank">' + label + '</a>'; //color:inherit;する？
                     cur = pos + len;
                 }
                 html += this.data.substr(cur);
