@@ -48,27 +48,29 @@ setTimeout(function () {
                 // console.log(html);
                 var df = range.createContextualFragment(html);
                 this.textNode.parentNode.replaceChild(df, this.textNode);
+
+                var elems = document.getElementsByClassName('pixivnize');
+                console.log(elems);
+                for (var i = 0; i < elems.length; ++i) {
+                    GM_xmlhttpRequest({
+                        method: "GET",
+                        url: elems[i].href,
+                        elem: elems[i],
+                        onload: function(xhr) {
+                            var elem = document.querySelector('#pixivnize-image-container');
+                            if (elem) {
+                                document.body.removeChild(elem);
+                            }
+                            var m;
+                            if (m = /<img src="(http:\/\/[^"]+)" alt="" class="_thumbnail/.exec(xhr.responseText)) {
+                                // console.log(m[1]);
+                                // document.body.insertAdjacentHTML('beforeend', '<div id="pixivnize-image-container" style="position:fixed;right:10px;bottom:24px;max-width:200px;"><img src="' + m[1] + '" alt=""></div>');
+                                this.elem.innerHTML = '<img src="' + m[1] + '" alt="">';
+                            }
+                        }
+                    });
+                }
             }
         });
     }
-
-    document.addEventListener('mouseover', function(ev) {
-        if (/pixivnize/.test(ev.target.className)) {
-            GM_xmlhttpRequest({
-                method: "GET",
-                url: ev.target.href,
-                onload: function(xhr) {
-                    var elem = document.querySelector('#pixivnize-image-container');
-                    if (elem) {
-                        document.body.removeChild(elem);
-                    }
-                    var m;
-                    if (m = /<img src="(http:\/\/[^"]+)" alt="" class="_thumbnail/.exec(xhr.responseText)) {
-                        // console.log(m[1]);
-                        document.body.insertAdjacentHTML('beforeend', '<div id="pixivnize-image-container" style="position:fixed;right:10px;bottom:24px;max-width:200px;"><img src="' + m[1] + '" alt=""></div>');
-                    }
-                }
-            });
-        }
-    }, true);
 }, 500);
