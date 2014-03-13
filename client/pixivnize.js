@@ -8,12 +8,12 @@
 // ==/UserScript==
 
 
-var XPATH = '/html/body/descendant::text()[string-length(normalize-space(self::text())) > 0 and not(ancestor::a or ancestor::button or ancestor::iframe or ancestor::textarea or ancestor::script or ancestor::style or ancestor::x:a or ancestor::x:button or ancestor::x:iframe or ancestor::x:textarea or ancestor::x:script or ancestor::x:style)]';
+var XPATH = '/html/body//text()[string-length(normalize-space(self::text())) > 0 and not(ancestor::a or ancestor::button or ancestor::iframe or ancestor::textarea or ancestor::script or ancestor::style or ancestor::x:a or ancestor::x:button or ancestor::x:iframe or ancestor::x:textarea or ancestor::x:script or ancestor::x:style)]';
 var NSResolver = function () {
     return 'http://www.w3.org/1999/xhtml'
 };
 var expr = document.createExpression(XPATH, NSResolver);
-(function () {
+setTimeout(function () {
     var textNodes = expr.evaluate(document, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     var range = document.createRange();
     range.selectNodeContents(document.body);
@@ -71,4 +71,4 @@ var expr = document.createExpression(XPATH, NSResolver);
             });
         }
     }, true);
-}) ();
+}, 500);
