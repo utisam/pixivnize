@@ -1,5 +1,6 @@
 #ifndef _PMA_H
 #define _PMA_H
+#include <cctype>
 #include <array>
 #include <string>
 #include <vector>
@@ -42,6 +43,9 @@ private:
 	node* add_path(const std::string& ptn, size_t pos=0) {
 		if (pos == ptn.size()) return this;
 		int c = ptn[pos] + 128;
+		if (islower(ptn[pos])) {
+			c = toupper(ptn[pos]) + 128;
+		}
 		if (!this->next[c]) {
 			this->next[c] = new node;
 		}

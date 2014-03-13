@@ -46,6 +46,9 @@ vector<match_result> node::match(const string& text) {
 			next += headbyte_utf8(text[i]);
 		}
 		int c = text[i] + 128;
+		if (islower(text[i])) {
+			c = toupper(text[i]) + 128;
+		}
 		v = v->nullnext(c)->next[c];
 		for (int length : v->accept) {
 			result.emplace_back(wblen - length, length);

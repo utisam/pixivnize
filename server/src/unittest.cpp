@@ -11,10 +11,11 @@ BOOST_AUTO_TEST_CASE(node_ascii) {
 		"ab", "bc", "bab", "d", "abcde",
 	}};
 	node* node = build(ptns);
-	string text = "xbabcdex";
+	string text = "xbabcdexBc";
 	auto result = node->match(text);
 	BOOST_REQUIRE_EQUAL(result[0], match_result(1, 3));
 	BOOST_REQUIRE_EQUAL(result[1], match_result(2, 5));
+	BOOST_REQUIRE_EQUAL(result[2], match_result(8, 2));
 }
 
 BOOST_AUTO_TEST_CASE(node_wb) {
